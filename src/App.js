@@ -1,13 +1,11 @@
-import ClassCounter from "./components/ClassCounter";
 import "./App.css";
-import FunctionCounter from "./components/FunctionCounter";
+import TodoApp from "./components/TodoApp";
 
 function App() {
   return (
     <div className="App">
-      <h1>Counter Assignment</h1>
-      <ClassCounter />
-      <FunctionCounter />
+      <h1>Todo Assignment</h1>
+      <TodoApp />
     </div>
   );
 }
