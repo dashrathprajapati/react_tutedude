@@ -67,4 +67,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 ### `npm run build` fails to minify
 
-Netlify Project demo link: [https://reactr-redux.netlify.app/](https://reactr-redux.netlify.app/)
+Netlify Project demo link: [https://reactr-crud.netlify.app/](https://reactr-crud.netlify.app/)
