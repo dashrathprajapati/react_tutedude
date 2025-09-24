@@ -3,26 +3,30 @@ import { NavLink } from 'react-router-dom';
 
 export default function Header() {
   return (
-    <header className="site-header">
-      <div className="header-inner container-flex">
-        <div className="logo"> 
-          <div className="logo-text">
-            <strong>React</strong> Router
-          </div>
-        </div>
+    <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+      <div className="container">
+        <NavLink to="/" className="navbar-brand d-flex align-items-center gap-2">
+          <span>React Router</span>
+        </NavLink>
 
-        <nav className="nav">
-          <NavLink to="/" end className={({ isActive }) => (isActive ? 'navlink active' : 'navlink')}>
-            Home
-          </NavLink>
-          <NavLink to="/about" className={({ isActive }) => (isActive ? 'navlink active' : 'navlink')}>
-            About
-          </NavLink>
-          <NavLink to="/user" className={({ isActive }) => (isActive ? 'navlink active' : 'navlink')}>
-            User Info
-          </NavLink>
-        </nav>
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav ms-auto">
+            <li className="nav-item">
+              <NavLink to="/" end className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Home</NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/about" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>About</NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/user" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>User Info</NavLink>
+            </li>
+          </ul>
+        </div>
       </div>
-    </header>
+    </nav>
   );
 }
