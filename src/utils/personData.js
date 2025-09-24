@@ -5,7 +5,7 @@ const person = {
   profession: 'Frontend Developer',
   bio: 'Passionate about building delightful interfaces. Loves tea, running, and open-source.',
   location: 'Ahmedabad, India',
-  image: '/profile.jpg', // put a profile.jpg in public/ or change to a URL
+  image: '/profile.jpg',
   contact: {
     email: 'dashrath@gmail.com',
     phone: '+919876543210'

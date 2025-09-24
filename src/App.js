@@ -8,9 +8,9 @@ import NotFound from './components/NotFound';
 
 function App() {
   return (
-    <div className="app-root">
+    <div className="d-flex flex-column min-vh-100">
       <Header />
-      <main className="container">
+      <main className="container my-4 flex-grow-1">
         <Routes>
           <Route path="/" element={<ProductList />} />
           <Route path="/cart" element={<Cart />} />
@@ -18,8 +18,10 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      <footer className="footer">
-        <p>© {new Date().getFullYear()} ShoeShop — Demo</p>
+      <footer className="bg-light py-3 mt-auto">
+        <div className="container text-center text-muted">
+          © {new Date().getFullYear()} ShoeShop — Demo
+        </div>
       </footer>
     </div>
   );

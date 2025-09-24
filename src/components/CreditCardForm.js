@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 
 function validateCardNumber(num) {
-  // very simple check: 13-19 digits
   return /^\d{13,19}$/.test(num.replace(/\s+/g, ''));
 }
 
 function validateExpiry(mmYY) {
-  // mm/yy or mm/yyyy
   const m = mmYY.split('/');
   if (m.length !== 2) return false;
   const month = parseInt(m[0], 10);
@@ -16,7 +14,6 @@ function validateExpiry(mmYY) {
   if (month < 1 || month > 12) return false;
   const now = new Date();
   const exp = new Date(year, month - 1, 1);
-  // set to last day of month
   exp.setMonth(exp.getMonth() + 1);
   return exp > now;
 }
@@ -30,13 +27,11 @@ export default function CreditCardForm({ amount, onSuccess }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // simple validations
     if (!name.trim()) return alert('Enter cardholder name');
     if (!validateCardNumber(cardNumber)) return alert('Card number looks invalid');
     if (!validateExpiry(expiry)) return alert('Expiry date invalid or expired');
     if (!/^\d{3,4}$/.test(cvc)) return alert('CVC invalid');
 
-    // simulate payment processing
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -51,35 +46,53 @@ export default function CreditCardForm({ amount, onSuccess }) {
   };
 
   return (
-    <form className="card-form" onSubmit={handleSubmit}>
-      <label>Cardholder Name
-        <input value={name} onChange={e => setName(e.target.value)} placeholder="Name on card" />
-      </label>
+  <form className="p-4 border rounded shadow-sm" onSubmit={handleSubmit}>
+    <div className="mb-3">
+      <label className="form-label">Cardholder Name</label>
+      <input
+        className="form-control"
+        value={name}
+        onChange={e => setName(e.target.value)}
+        placeholder="Name on card"
+      />
+    </div>
 
-      <label>Card Number
+    <div className="mb-3">
+      <label className="form-label">Card Number</label>
+      <input
+        className="form-control"
+        value={cardNumber}
+        onChange={e => setCardNumber(e.target.value.replace(/\D/g, ''))}
+        placeholder="4242424242424242"
+        inputMode="numeric"
+      />
+    </div>
+
+    <div className="row mb-3">
+      <div className="col">
+        <label className="form-label">Expiry (MM/YY)</label>
         <input
-          value={cardNumber}
-          onChange={e => setCardNumber(e.target.value.replace(/\D/g, ''))}
-          placeholder="4242424242424242"
+          className="form-control"
+          value={expiry}
+          onChange={e => setExpiry(e.target.value)}
+          placeholder="08/25"
+        />
+      </div>
+      <div className="col-4">
+        <label className="form-label">CVC</label>
+        <input
+          className="form-control"
+          value={cvc}
+          onChange={e => setCvc(e.target.value.replace(/\D/g, ''))}
+          placeholder="123"
           inputMode="numeric"
         />
-      </label>
-
-      <div style={{display:'flex', gap:10}}>
-        <label style={{flex:1}}>Expiry (MM/YY)
-          <input value={expiry} onChange={e => setExpiry(e.target.value)} placeholder="08/25" />
-        </label>
-
-        <label style={{width:110}}>CVC
-          <input value={cvc} onChange={e => setCvc(e.target.value.replace(/\D/g, ''))} placeholder="123" inputMode="numeric" />
-        </label>
       </div>
+    </div>
 
-      <div style={{marginTop:12}}>
-        <button className="btn primary" type="submit" disabled={loading}>
-          {loading ? 'Processing...' : `Pay ₹${amount}`}
-        </button>
-      </div>
-    </form>
+    <button className="btn btn-primary w-100" type="submit" disabled={loading}>
+      {loading ? 'Processing...' : `Pay ₹${amount}`}
+    </button>
+  </form>
   );
 }

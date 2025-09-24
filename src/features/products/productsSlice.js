@@ -22,7 +22,7 @@ const productsSlice = createSlice({
         );
       }
     },
-    // optionally allow adding products dynamically
+    
     addProduct(state, action) {
       state.items.push(action.payload);
       state.filtered = state.items;

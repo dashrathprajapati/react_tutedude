@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearch } from '../features/products/productsSlice';
@@ -11,33 +11,46 @@ export default function Header() {
 
   const onSearchChange = (e) => {
     dispatch(setSearch(e.target.value));
-    // Optionally keep user on product list page
     navigate('/');
   };
-
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <header className="site-header">
-      <div className="header-inner container-flex">
-        <Link to="/" className="logo">
-          <span className="logo-mark">SS</span>
-          <div className="logo-text"><strong>Shoe</strong>Shop</div>
-        </Link>
 
-        <div style={{flex:1, marginLeft:16, marginRight:16}}>
+    <header className="bg-light shadow-sm">
+      <nav className="navbar navbar-expand-lg navbar-light container">
+        <Link to="/" className="navbar-brand d-flex align-items-center">
+          <span className="fw-bold fs-4 me-2">SS</span>
+          <span><strong>Shoe</strong>Shop</span>
+        </Link>
+        <button
+          className="navbar-toggler"
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="d-flex flex-grow-1 mx-3">
           <input
             aria-label="Search shoes"
             value={search}
             onChange={onSearchChange}
             placeholder="Search by name or brand..."
-            className="search-input"
+            className="form-control"
           />
         </div>
-
-        <nav className="nav">
-          <Link to="/" className="navlink">Shop</Link>
-          <Link to="/cart" className="navlink">Cart ({cartQty})</Link>
-        </nav>
-      </div>
+        <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`}>
+          <ul className="navbar-nav ms-auto">
+            <li className="nav-item">
+              <Link to="/" className="nav-link" onClick={() => setIsOpen(false)}>Shop</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/cart" className="nav-link" onClick={() => setIsOpen(false)}>
+                Cart ({cartQty})
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </nav>
     </header>
   );
 }

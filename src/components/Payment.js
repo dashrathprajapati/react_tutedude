@@ -17,38 +17,56 @@ export default function Payment() {
   };
 
   return (
-    <section>
-      <h1>Payment</h1>
-      {items.length === 0 ? (
-        <div>
-          <p>Your cart is empty. Add items before paying.</p>
-          <Link to="/">Go Shopping</Link>
-        </div>
-      ) : (
-        <div className="payment-grid">
-          <div className="payment-cart">
-            <h3>Order Review</h3>
-            {items.map(it => (
-              <div key={it.id} className="payment-row">
-                <img src={it.image} alt={it.title} />
-                <div>
-                  <strong>{it.title}</strong>
-                  <p className="muted">Qty: {it.qty} • ₹{it.price*it.qty}</p>
+    <section className="container my-4">
+    <h1 className="mb-4">Payment</h1>
+    {items.length === 0 ? (
+      <div className="alert alert-info">
+        <p className="mb-3">Your cart is empty. Add items before paying.</p>
+        <Link to="/" className="btn btn-primary">Go Shopping</Link>
+      </div>
+    ) : (
+      <div className="row">
+        <div className="col-md-6 mb-4">
+          <div className="card shadow-sm">
+            <div className="card-body">
+              <h3 className="card-title mb-4">Order Review</h3>
+              {items.map(it => (
+                <div key={it.id} className="d-flex align-items-center mb-3 border-bottom pb-2">
+                  <img
+                    src={it.image}
+                    alt={it.title}
+                    className="me-3 rounded"
+                    style={{ width: 60, height: 60, objectFit: 'cover' }}
+                  />
+                  <div>
+                    <strong>{it.title}</strong>
+                    <p className="text-muted mb-0">
+                      Qty: {it.qty} • ₹{it.price * it.qty}
+                    </p>
+                  </div>
                 </div>
+              ))}
+              <div className="d-flex justify-content-between align-items-center mt-3 mb-3">
+                <strong>Total:</strong>
+                <strong>₹{totalAmount}</strong>
               </div>
-            ))}
-            <div className="order-total">
-              <strong>Total: ₹{totalAmount}</strong>
+              <Link to="/cart" className="btn btn-outline-secondary w-100">
+                Back to Cart
+              </Link>
             </div>
-            <Link to="/cart" className="btn">Back to Cart</Link>
-          </div>
-
-          <div className="payment-form">
-            <h3>Enter Payment Details</h3>
-            <CreditCardForm amount={totalAmount} onSuccess={onPaymentSuccess} />
           </div>
         </div>
-      )}
+
+        <div className="col-md-6 mb-4">
+          <div className="card shadow-sm">
+            <div className="card-body">
+              <h3 className="card-title mb-4">Enter Payment Details</h3>
+              <CreditCardForm amount={totalAmount} onSuccess={onPaymentSuccess} />
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
     </section>
   );
 }
