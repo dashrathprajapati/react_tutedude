@@ -58,38 +58,65 @@ export default function UserForm({ initialData = null, onSubmit, onCancel, disab
   }
 
   return (
-    <form className="user-form" onSubmit={handleSubmit} noValidate>
-      <label>
-        Name
-        <input value={name} onChange={(e) => setName(e.target.value)} disabled={disabled} />
-        {errors.name && <small className="field-error">{errors.name}</small>}
-      </label>
+    <form className="needs-validation" onSubmit={handleSubmit} noValidate>
+      <div className="mb-3">
+        <label className="form-label">Name</label>
+        <input
+          type="text"
+          className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          disabled={disabled}
+        />
+        {errors.name && <div className="invalid-feedback">{errors.name}</div>}
+      </div>
 
-      <label>
-        Username
-        <input value={username} onChange={(e) => setUsername(e.target.value)} disabled={disabled} />
-        {errors.username && <small className="field-error">{errors.username}</small>}
-      </label>
+      <div className="mb-3">
+        <label className="form-label">Username</label>
+        <input
+          type="text"
+          className={`form-control ${errors.username ? 'is-invalid' : ''}`}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          disabled={disabled}
+        />
+        {errors.username && <div className="invalid-feedback">{errors.username}</div>}
+      </div>
 
-      <label>
-        Email
-        <input value={email} onChange={(e) => setEmail(e.target.value)} disabled={disabled} />
-        {errors.email && <small className="field-error">{errors.email}</small>}
-      </label>
+      <div className="mb-3">
+        <label className="form-label">Email</label>
+        <input
+          type="email"
+          className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          disabled={disabled}
+        />
+        {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+      </div>
 
-      <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-        <button type="submit" className="btn primary" disabled={disabled}>
+      <div className="d-flex gap-2 mt-3">
+        <button type="submit" className="btn" disabled={disabled}>
           {initialData ? 'Update User' : 'Add User'}
         </button>
         {initialData && (
-          <button type="button" className="btn" onClick={onCancel} disabled={disabled}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={onCancel}
+            disabled={disabled}
+          >
             Cancel
           </button>
         )}
       </div>
 
       {status && (
-        <p className={status.type === 'success' ? 'info' : 'error'} style={{ marginTop: 8 }}>
+        <p
+          className={`mt-3 ${
+            status.type === 'success' ? 'text-success' : 'text-danger'
+          }`}
+        >
           {status.message}
         </p>
       )}
