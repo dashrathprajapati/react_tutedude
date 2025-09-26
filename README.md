@@ -67,4 +67,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 ### `npm run build` fails to minify
 
+# By default Add User feature will work and its also showing Add User in Submit button, when I click on edit button that time its working fine for me as I cheked and its also updated in a list As well I uploaded video in public directory ****/public/React-App.webm
+
 Netlify Project demo link: [https://reactr-crud.netlify.app/](https://reactr-crud.netlify.app/)
