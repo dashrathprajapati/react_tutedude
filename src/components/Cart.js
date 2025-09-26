@@ -13,7 +13,7 @@ export default function Cart() {
   };
 
 return (
-    <section className="container my-5">
+    <section className="my-5">
       <h1 className="mb-4">Your Cart</h1>
       {items.length === 0 ? (
         <div className="alert alert-info">

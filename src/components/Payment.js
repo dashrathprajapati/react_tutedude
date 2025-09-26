@@ -17,7 +17,7 @@ export default function Payment() {
   };
 
   return (
-    <section className="container my-4">
+    <section className="my-4">
     <h1 className="mb-4">Payment</h1>
     {items.length === 0 ? (
       <div className="alert alert-info">

@@ -6,7 +6,7 @@ export default function ProductList() {
   const products = useSelector(s => s.products.filtered);
 
   return (
-    <section className="container my-5">
+    <section className="my-5">
       <h1 className="mb-4">Shop</h1>
       <div className="row g-4">
         {products.length === 0 ? (

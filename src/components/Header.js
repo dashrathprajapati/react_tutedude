@@ -17,7 +17,7 @@ export default function Header() {
   return (
 
     <header className="bg-light shadow-sm">
-      <nav className="navbar navbar-expand-lg navbar-light container">
+      <nav className="navbar navbar-expand-lg navbar-light container-fluid">
         <Link to="/" className="navbar-brand d-flex align-items-center">
           <span className="fw-bold fs-4 me-2">SS</span>
           <span><strong>Shoe</strong>Shop</span>

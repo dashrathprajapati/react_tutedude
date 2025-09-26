@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="d-flex flex-column min-vh-100">
       <Header />
-      <main className="container my-4 flex-grow-1">
+      <main className="container-fluid my-4 flex-grow-1">
         <Routes>
           <Route path="/" element={<ProductList />} />
           <Route path="/cart" element={<Cart />} />
@@ -19,7 +19,7 @@ function App() {
         </Routes>
       </main>
       <footer className="bg-light py-3 mt-auto">
-        <div className="container text-center text-muted">
+        <div className="container-fluid text-center text-muted">
           © {new Date().getFullYear()} ShoeShop — Demo
         </div>
       </footer>
