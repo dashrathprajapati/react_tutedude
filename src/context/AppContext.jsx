@@ -12,26 +12,52 @@ export default function AppProvider({ children }) {
   useEffect(() => {
     save("finance-data", data);
   }, [data]);
+
+  function totalByType(type, overrideTransactions) {
+    const list = Array.isArray(overrideTransactions ? overrideTransactions : data.transactions)
+      ? (overrideTransactions ? overrideTransactions : data.transactions)
+      : [];
+    return list
+      .filter((t) => String(t.type || "").toLowerCase() === String(type).toLowerCase())
+      .reduce((a, b) => a + Number(b.amount || 0), 0);
+  }
+
+  function checkExpenseAllowed(amount, extraTransactions) {
+    const income = totalByType("income", extraTransactions);
+    const expense = totalByType("expense", extraTransactions);
+    return expense + Number(amount || 0) <= income;
+  }
   function addTransaction(tx) {
-    const next = { ...tx, id: Date.now() };
-    setData((s) => ({ ...s, transactions: [next, ...s.transactions] }));
+    const payload = { ...tx, amount: Number(tx.amount || 0) };
+    if (String(payload.type || "").toLowerCase() === "expense") {
+      if (!checkExpenseAllowed(payload.amount)) {
+        toast.error("Cannot add expense: total expenses would exceed total income");
+        return false;
+      }
+    }
+    const next = { ...payload, id: Date.now() };
+    setData((s) => ({ ...s, transactions: [next, ...(Array.isArray(s.transactions) ? s.transactions : [])] }));
     toast.success("Transaction added");
     checkBudget(next);
+    return true;
   }
   function updateTransaction(id, patch) {
-    setData((s) => ({
-      ...s,
-      transactions: s.transactions.map((t) =>
-        t.id === id ? { ...t, ...patch } : t
-      ),
-    }));
+    const existing = (data.transactions || []).find((t) => t.id === id);
+    if (!existing) return false;
+    const updated = { ...existing, ...patch, amount: Number(patch.amount ?? existing.amount) };
+    const all = (data.transactions || []).map((t) => (t.id === id ? updated : t));
+    if (String(updated.type || "").toLowerCase() === "expense") {
+      if (!checkExpenseAllowed(updated.amount, all)) {
+        toast.error("Cannot update: total expenses would exceed total income");
+        return false;
+      }
+    }
+    setData((s) => ({ ...s, transactions: all }));
     toast.success("Transaction updated");
+    return true;
   }
   function deleteTransaction(id) {
-    setData((s) => ({
-      ...s,
-      transactions: s.transactions.filter((t) => t.id !== id),
-    }));
+    setData((s) => ({ ...s, transactions: s.transactions.filter((t) => t.id !== id) }));
     toast.success("Transaction deleted");
   }
   function setBudget(category, amount) {
@@ -49,7 +75,7 @@ export default function AppProvider({ children }) {
   function checkBudget(tx) {
     if (tx.type !== "expense") return;
     const spent =
-      data.transactions
+      (data.transactions || [])
         .filter((t) => t.type === "expense" && t.category === tx.category)
         .reduce((a, b) => a + b.amount, 0) + tx.amount;
     const limit = data.budgets[tx.category];
@@ -58,8 +84,8 @@ export default function AppProvider({ children }) {
     }
   }
   function checkAllBudgets() {
-    Object.keys(data.budgets).forEach((cat) => {
-      const spent = data.transactions
+    Object.keys(data.budgets || {}).forEach((cat) => {
+      const spent = (data.transactions || [])
         .filter((t) => t.type === "expense" && t.category === cat)
         .reduce((a, b) => a + b.amount, 0);
       if (spent > data.budgets[cat]) toast.error(`Budget exceeded for ${cat}`);

@@ -1,99 +1,115 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useApp } from "../context/AppContext";
 
 export default function TransactionForm({ initialData, onClose }) {
   const { addTransaction, updateTransaction } = useApp();
+  const [form, setForm] = useState({
+    type: "expense",
+    amount: "",
+    category: "",
+    date: "",
+    description: "",
+  });
 
-  const [type, setType] = useState("Expense");
-  const [amount, setAmount] = useState("");
-  const [category, setCategory] = useState("");
-  const [date, setDate] = useState("");
-  const [description, setDescription] = useState("");
-
-  // Prefill form when initialData changes (edit mode)
   useEffect(() => {
     if (initialData) {
-      setType(initialData.type || "Expense");
-      setAmount(initialData.amount || "");
-      setCategory(initialData.category || "");
-      setDate(initialData.date || "");
-      setDescription(initialData.description || "");
+      setForm({
+        type: initialData.type || "expense",
+        amount: initialData.amount || "",
+        category: initialData.category || "",
+        date: initialData.date || "",
+        description: initialData.description || "",
+      });
     } else {
-      // Clear form for add mode
-      setType("Expense");
-      setAmount("");
-      setCategory("");
-      setDate("");
-      setDescription("");
+      setForm({
+        type: "expense",
+        amount: "",
+        category: "",
+        date: "",
+        description: "",
+      });
     }
   }, [initialData]);
 
-  const handleSubmit = (e) => {
+  function change(key, val) {
+    setForm((f) => ({ ...f, [key]: val }));
+  }
+
+  async function submit(e) {
     e.preventDefault();
-    const transactionData = { type, amount, category, date, description };
-
+    const payload = { ...form, amount: Number(form.amount || 0) };
+    let ok = true;
     if (initialData) {
-      updateTransaction(initialData.id, transactionData);
+      ok = updateTransaction(initialData.id, payload);
     } else {
-      addTransaction(transactionData);
+      ok = addTransaction(payload);
     }
-
-    onClose(); // close form after submit
-  };
+    if (!ok) return;
+    onClose && onClose();
+    if (!initialData) {
+      setForm({
+        type: "expense",
+        amount: "",
+        category: "",
+        date: "",
+        description: "",
+      });
+    }
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="card p-3 mb-3">
-      <div className="mb-2">
-        <label className="form-label">Type</label>
-        <select className="form-select" value={type} onChange={(e) => setType(e.target.value)}>
-          <option value="Income">Income</option>
-          <option value="Expense">Expense</option>
-        </select>
+    <form onSubmit={submit} className="card p-3 mb-3">
+      <div className="row g-2">
+        <div className="col-4">
+          <select
+            className="form-select"
+            value={form.type}
+            onChange={(e) => change("type", e.target.value)}
+          >
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+          </select>
+        </div>
+        <div className="col-4">
+          <input
+            className="form-control"
+            placeholder="Amount"
+            value={form.amount}
+            onChange={(e) => change("amount", e.target.value)}
+          />
+        </div>
+        <div className="col-4">
+          <input
+            className="form-control"
+            placeholder="Category"
+            value={form.category}
+            onChange={(e) => change("category", e.target.value)}
+          />
+        </div>
       </div>
 
-      <div className="mb-2">
-        <label className="form-label">Amount</label>
-        <input
-          type="number"
-          className="form-control"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
+      <div className="row g-2 mt-2">
+        <div className="col-6">
+          <input
+            className="form-control"
+            type="date"
+            value={form.date}
+            onChange={(e) => change("date", e.target.value)}
+          />
+        </div>
+        <div className="col-6">
+          <input
+            className="form-control"
+            placeholder="Description"
+            value={form.description}
+            onChange={(e) => change("description", e.target.value)}
+          />
+        </div>
       </div>
 
-      <div className="mb-2">
-        <label className="form-label">Category</label>
-        <input
-          type="text"
-          className="form-control"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        />
-      </div>
-
-      <div className="mb-2">
-        <label className="form-label">Date</label>
-        <input
-          type="date"
-          className="form-control"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
-      </div>
-
-      <div className="mb-2">
-        <label className="form-label">Description</label>
-        <input
-          type="text"
-          className="form-control"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </div>
-
-      <div className="d-flex gap-2">
-        <button type="submit" className="btn btn-primary">
-          {initialData ? "Update Transaction" : "Add Transaction"}
+      <div className="d-flex gap-2 mt-3">
+        <button className="btn btn-primary" type="submit">
+          {initialData ? "Update" : "Save"}
         </button>
         <button type="button" className="btn btn-secondary" onClick={onClose}>
           Cancel
