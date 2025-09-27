@@ -122,9 +122,13 @@ export default function Dashboard() {
           </div>
           <div className="card p-3">
             <h5>Date Filter</h5>
-            <div className="d-flex gap-1">
-              <input type="date" className="form-control" />
-              <input type="date" className="form-control" />
+            <div class="row g-2">
+                <div class="col-6">
+                    <input class="form-control" type="date" />
+                </div>
+                <div class="col-6">
+                    <input class="form-control" type="date" />
+                </div>
             </div>
           </div>
         </div>
