@@ -1,66 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { useApp } from "../context/AppContext";
+import { useSelector } from "react-redux";
+import { FaShoppingCart } from "react-icons/fa";
+
 export default function Header() {
-  const { data } = useApp();
+  const cartItems = useSelector((state) => state.cart.items);
+  const [open, setOpen] = useState(false);
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-      <div className="container container-max">
-        <Link to="/" className="navbar-brand d-flex align-items-center gap-2">
-          <span className="badge bg-primary rounded-pill">PF</span>
-          <span>FinanceTracker</span>
+    <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+      <div className="container">
+        <Link to="/" className="navbar-brand fw-bold">
+          Food-Fusion
         </Link>
         <button
           className="navbar-toggler"
           type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#nav"
-          aria-controls="nav"
-          aria-expanded="false"
+          onClick={() => setOpen((o) => !o)}
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="nav">
+        <div className={`collapse navbar-collapse ${open ? "show" : ""}`}>
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <NavLink
-                to="/"
-                end
-                className={({ isActive }) =>
-                  isActive ? "nav-link active" : "nav-link"
-                }
-              >
-                Dashboard
+              <NavLink to="/" end className="nav-link">
+                Home
               </NavLink>
             </li>
             <li className="nav-item">
               <NavLink
-                to="/transactions"
-                className={({ isActive }) =>
-                  isActive ? "nav-link active" : "nav-link"
-                }
+                to="/cart"
+                className="nav-link d-flex align-items-center"
               >
-                Transactions
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                to="/budgets"
-                className={({ isActive }) =>
-                  isActive ? "nav-link active" : "nav-link"
-                }
-              >
-                Budgets
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                to="/profile"
-                className={({ isActive }) =>
-                  isActive ? "nav-link active" : "nav-link"
-                }
-              >
-                Profile
+                <FaShoppingCart className="me-1" /> Cart ({cartItems.length})
               </NavLink>
             </li>
           </ul>

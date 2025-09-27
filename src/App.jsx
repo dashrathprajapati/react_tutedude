@@ -1,23 +1,24 @@
-import React from "react";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
-import Transactions from "./pages/Transactions";
-import Budgets from "./pages/Budgets";
-import Profile from "./pages/Profile";
+import React, { Suspense, lazy } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+
+const Home = lazy(() => import("./pages/Home"));
+
+const Cart = lazy(() => import("./pages/Cart"));
+const ProductDetails = lazy(() => import("./pages/ProductDetails"));
+
 export default function App() {
   return (
     <BrowserRouter>
       <Header />
-      <div className="container container-max my-4">
+      <Suspense fallback={<p className="text-center py-4">Loading...</p>}>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/transactions" element={<Transactions />} />
-          <Route path="/budgets" element={<Budgets />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
         </Routes>
-      </div>
+      </Suspense>
       <Footer />
     </BrowserRouter>
   );
