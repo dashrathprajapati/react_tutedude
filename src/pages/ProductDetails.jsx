@@ -12,7 +12,7 @@ export default function ProductDetails() {
   useEffect(() => {
     axios
       .get(`https://68da3fef23ebc87faa2f73d6.mockapi.io/food-api?id=${id}`)
-      .then((res) => setProduct(res.data));
+      .then((res) => setProduct(res.data[0]));
   }, [id]);
 
   if (!product) return <p>Loading...</p>;
